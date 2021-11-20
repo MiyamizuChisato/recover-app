@@ -37,11 +37,11 @@ public class JwtInterceptor implements HandlerInterceptor {
                 e.printStackTrace();
                 map.put("msg", "token无效！");
             }
-            map.put("state", false);
-            String json = new ObjectMapper().writeValueAsString(map);
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(json);
         }
+        map.put("state", false);
+        String json = new ObjectMapper().writeValueAsString(map);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(json);
         return false;
     }
 }
