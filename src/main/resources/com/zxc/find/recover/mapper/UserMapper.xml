@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxc.find.recover.mapper.UserMapper">
+    <resultMap id="userMap" type="com.zxc.find.recover.entity.User">
+        <result column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="wechat" property="wechat"/>
+        <result column="qq" property="qq"/>
+        <result column="name" property="name"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gender" property="gender"/>
+    </resultMap>
+    <select id="selectUserById" resultMap="userMap">
+        select user_id       id,
+               user_email    email,
+               user_phone    phone,
+               user_wechat   wechat,
+               user_qq       qq,
+               user_name     name,
+               user_avatar   avatar,
+               user_gender   gender
+        from recover_users
+        where user_id = #{id}
+    </select>
+</mapper>

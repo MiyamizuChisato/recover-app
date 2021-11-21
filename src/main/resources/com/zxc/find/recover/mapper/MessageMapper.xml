@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxc.find.recover.mapper.MessageMapper">
+
+    <resultMap id="messageMap" type="com.zxc.find.recover.entity.Message">
+        <result column="id" property="id"/>
+        <result column="isDelete" property="isDelete"/>
+        <result column="date" property="date"/>
+        <result column="content" property="content"/>
+        <association column="userId" property="user" select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
+        </association>
+    </resultMap>
+    <select id="selectMessageByFindId" resultMap="messageMap">
+        select message_id        id,
+               message_is_delete isDelete,
+               message_date      date,
+               message_content   content,
+               fk_user_id        userId,
+               fk_find_id        findId
+        from recover_message
+        where fk_find_id = #{id}
+    </select>
+</mapper>

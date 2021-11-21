@@ -20,7 +20,7 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
         Map<String, Object> map = new HashMap<>(12);
-        if ("".equals(token)) {
+        if (!"".equals(token)) {
             try {
                 JwtUtils.verity(token);
                 return true;
