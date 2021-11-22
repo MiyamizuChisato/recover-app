@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author Miyam
  */
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("recover_articles")
-public class Article {
+public class Article implements Serializable {
     // 物品Id，前端不用传
 
     @TableId(type = IdType.AUTO, value = "article_id")

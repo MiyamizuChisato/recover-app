@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("recover_lost")
-public class Lost {
+public class Lost implements Serializable {
     @TableId(type = IdType.AUTO, value = "lost_id")
     private Integer id;
     @TableField("lost_claim")

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -17,7 +18,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("recover_message")
-public class Message {
+public class Message implements Serializable {
     @TableId(type = IdType.AUTO, value = "message_id")
     private Integer id;
     @TableField("message_is_delete")
