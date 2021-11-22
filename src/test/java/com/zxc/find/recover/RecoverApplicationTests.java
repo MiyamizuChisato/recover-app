@@ -23,8 +23,10 @@ class RecoverApplicationTests {
 
     @Test
     void contextLoads() {
-        Find find = mapper.selectFindById(1);
-        System.out.println(find);
+        List<Find> finds = mapper.selectFindsForIndex();
+        for (Find find : finds) {
+            System.out.println(find);
+        }
     }
 
 }

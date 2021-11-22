@@ -3,6 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zxc.find.recover.mapper.FindMapper">
+    <resultMap id="findMapIndex" type="com.zxc.find.recover.entity.Find">
+        <result column="id" property="id"/>
+        <result column="viewCount" property="viewCount"/>
+        <result column="startTime" property="startTime"/>
+        <association column="startUserId" property="startUser"
+                     select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
+        </association>
+        <association column="articleId" property="article"
+                     select="com.zxc.find.recover.mapper.ArticleMapper.selectArticleById">
+        </association>
+    </resultMap>
     <resultMap id="findMap" type="com.zxc.find.recover.entity.Find">
         <result column="id" property="id"/>
         <result column="claim" property="claim"/>
@@ -10,7 +21,7 @@
         <result column="startTime" property="startTime"/>
         <result column="endTime" property="endTime"/>
         <result column="detail" property="detail"/>
-        <association column="startUerId" property="startUser"
+        <association column="startUserId" property="startUser"
                      select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
         </association>
         <association column="endUserId" property="endUser"
@@ -30,6 +41,15 @@
             </association>
         </collection>
     </resultMap>
+    <select id="selectFindsForIndex" resultMap="findMapIndex">
+        select find_id          id,
+               find_view_count  viewCount,
+               find_start_time  startTime,
+               fk_start_user_id startUserId,
+               fk_article_id    articleId
+        from recover_finds
+        where find_claim = 0
+    </select>
     <select id="selectFindById" resultMap="findMap">
         select find_id          id,
                find_claim       claim,
@@ -37,7 +57,7 @@
                find_start_time  startTime,
                find_end_time    endTime,
                find_detail      detail,
-               fk_start_user_id startUerId,
+               fk_start_user_id startUserId,
                fk_end_user_id   endUserId,
                fk_article_id    articleId
         from recover_finds
