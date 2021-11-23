@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,18 +44,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Response register(User user, MultipartFile userAvatar, HttpSession session) {
-        String realPath = session.getServletContext().getRealPath("static/images/avatar/");
-        System.out.println(realPath);
-//        if (StringUtils.hasLength(user.getPassword())
-//                && StringUtils.hasLength(user.getPassword())
-//                && StringUtils.hasLength(user.getName())) {
-//            int i = service.register(user, userAvatar);
-//            if (i > 0) {
-//                return Response.SUCCEED().carry("success", "注册成功");
-//            }
-//            return Response.DEFEAT().carry("defeat", "填写信息有误");
-//        }
+    public Response register(User user, MultipartFile userAvatar) {
+        if (StringUtils.hasLength(user.getEmail())
+                && StringUtils.hasLength(user.getPassword())
+                && StringUtils.hasLength(user.getPassword())
+                && StringUtils.hasLength(user.getName())) {
+            int i = service.register(user, userAvatar);
+            if (i > 0) {
+                return Response.SUCCEED().carry("success", "注册成功");
+            }
+            return Response.DEFEAT().carry("defeat", "填写信息有误");
+        }
         return Response.DEFEAT().carry("defeat", "借口调用无效");
     }
 }

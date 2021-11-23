@@ -8,7 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * @author Miyam
@@ -18,10 +20,11 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("recover_users")
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO, value = "user_id")
     private Integer id;
-
+    @NotBlank(message = "邮箱不能为空")
     @Pattern(regexp = "^[A-Za-z0-9-_]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", message = "邮箱输入不合法")
     @TableField("user_email")
     private String email;
@@ -31,8 +34,10 @@ public class User {
     private String wechat;
     @TableField("user_qq")
     private String qq;
+    @NotBlank(message = "密码不能为空")
     @TableField("user_password")
     private String password;
+    @NotBlank(message = "用户名不能为空")
     @Pattern(regexp = "(^[a-zA-Z0-9_-]{6,16}$)|(^[\\u2E80-\\u9FFF]{2,5})", message = "姓名输入不合法")
     @TableField("user_name")
     private String name;

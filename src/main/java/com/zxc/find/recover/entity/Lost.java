@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @TableName("recover_lost")
 public class Lost implements Serializable {
+    private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO, value = "lost_id")
     private Integer id;
     @TableField("lost_claim")
@@ -27,13 +28,19 @@ public class Lost implements Serializable {
     @TableField("lost_view_count")
     private Integer viewCount;
     @TableField("lost_start_time")
-    private Date startTime;
+    private Timestamp startTime;
     @TableField("lost_end_time")
-    private Date endTime;
+    private Timestamp endTime;
     @TableField("lost_detail")
     private String detail;
     private User startUser;
+    @TableField("fk_start_user_id")
+    private Integer startUserId;
     private User endUser;
+    @TableField("fk_end_user_id")
+    private Integer endUserId;
     private Article article;
+    @TableField("fk_article_id")
+    private Integer articleId;
     private List<Message> messages;
 }
