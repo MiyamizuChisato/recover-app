@@ -5,7 +5,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: ao1sakura
-    url: jdbc:mysql://localhost:3306/recover
+    url: jdbc:mysql://localhost:3306/recover?serverTimezone=UTC&characterEncoding=utf-8
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis-plus:
   configuration:

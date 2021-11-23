@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * @author Miyam
@@ -19,12 +19,13 @@ import java.sql.Date;
 @AllArgsConstructor
 @TableName("recover_message")
 public class Message implements Serializable {
+    private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO, value = "message_id")
     private Integer id;
     @TableField("message_is_delete")
     private Integer isDelete;
     @TableField("message_date")
-    private Date date;
+    private Timestamp date;
     @TableField("message_content")
     private String content;
     private User user;

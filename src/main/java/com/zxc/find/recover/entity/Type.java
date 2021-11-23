@@ -19,7 +19,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("recover_type")
 public class Type implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     // 类别唯一标识，后端自动生成
 
     @TableId(type = IdType.AUTO, value = "type_id")
