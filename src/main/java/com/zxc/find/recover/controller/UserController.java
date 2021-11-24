@@ -47,7 +47,6 @@ public class UserController {
     public Response register(User user, MultipartFile userAvatar) {
         if (StringUtils.hasLength(user.getEmail())
                 && StringUtils.hasLength(user.getPassword())
-                && StringUtils.hasLength(user.getPassword())
                 && StringUtils.hasLength(user.getName())) {
             int i = service.register(user, userAvatar);
             if (i > 0) {

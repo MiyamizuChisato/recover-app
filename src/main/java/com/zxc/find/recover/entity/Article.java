@@ -27,6 +27,7 @@ public class Article implements Serializable {
     private String name;
     @TableField("article_summary")
     private String summary;
+    @TableField(exist = false)
     private Type type;
     @TableField("fk_type_id")
     private Integer typeId;

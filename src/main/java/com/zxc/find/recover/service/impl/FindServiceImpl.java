@@ -39,12 +39,15 @@ public class FindServiceImpl implements FindService {
 
     @Override
     public Find getFindById(Integer id) {
-        return mapper.selectFindById(id);
+        Find find = mapper.selectFindById(id);
+        find.setViewCount(find.getViewCount() + 1);
+        this.updateFind(find);
+        return find;
     }
 
     @Override
     public int addNewFind(Find find, MultipartFile picture) {
-        if (StringUtils.hasLength(picture.getOriginalFilename())) {
+        if (picture != null) {
             try {
                 String path = ResourceUtils.getURL("classpath:").getPath() + "static/images/article";
                 String uuid = UUID.randomUUID().toString();
@@ -81,10 +84,6 @@ public class FindServiceImpl implements FindService {
     public int updateFind(Find find) {
         QueryWrapper<Find> wrapper = new QueryWrapper<>();
         wrapper.eq("find_id", find.getId());
-        find.setStartUser(null);
-        find.setEndUser(null);
-        find.setArticle(null);
-        find.setMessages(null);
         return mapper.update(find, wrapper);
     }
 

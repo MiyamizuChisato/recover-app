@@ -28,5 +28,8 @@ public class Message implements Serializable {
     private Timestamp date;
     @TableField("message_content")
     private String content;
+    @TableField("fk_user_id")
+    private Integer userId;
+    @TableField(exist = false)
     private User user;
 }

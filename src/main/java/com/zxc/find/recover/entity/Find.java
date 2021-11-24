@@ -33,14 +33,18 @@ public class Find implements Serializable {
     private Timestamp endTime;
     @TableField("find_detail")
     private String detail;
+    @TableField(exist = false)
     private User startUser;
     @TableField("fk_start_user_id")
     private Integer startUserId;
+    @TableField(exist = false)
     private User endUser;
     @TableField("fk_end_user_id")
     private Integer endUserId;
+    @TableField(exist = false)
     private Article article;
     @TableField("fk_article_id")
     private Integer articleId;
+    @TableField(exist = false)
     private List<Message> messages;
 }
