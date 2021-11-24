@@ -92,4 +92,56 @@ public class FindServiceImpl implements FindService {
         find.setViewCount(find.getViewCount() + 1);
         updateFind(find);
     }
+
+    @Override
+    public int addNewFind(Find find, MultipartFile picture) {
+        if (StringUtils.hasLength(picture.getOriginalFilename())) {
+            try {
+                String path = ResourceUtils.getURL("classpath:").getPath() + "static/images/article";
+                String uuid = UUID.randomUUID().toString();
+                String suffix = picture.getOriginalFilename().substring(picture.getOriginalFilename().lastIndexOf("."));
+                File file = new File(path);
+                if (!file.exists()) {
+                    file.mkdir();
+                }
+                String picPath = path + "/" + uuid + suffix;
+                picture.transferTo(new File(picPath));
+                find.getArticle().setPicture("/images/article/" + uuid + suffix);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            find.getArticle().setPicture("/images/article/" + "article.png");
+        }
+        int articleResult = articleMapper.insert(find.getArticle());
+        java.util.Date date = new Date();
+        Timestamp t = new Timestamp(date.getTime());
+        find.setStartTime(t);
+        find.setArticleId(find.getArticle().getId());
+        find.setArticle(null);
+        int findResult = mapper.insert(find);
+        if (findResult > 0 && articleResult > 0) {
+            return 1;
+        }
+        return -1;
+    }
+
+    @Override
+    public int updateFind(Find find) {
+        QueryWrapper<Find> wrapper = new QueryWrapper<>();
+        wrapper.eq("find_id", find.getId());
+        find.setStartUser(null);
+        find.setEndUser(null);
+        find.setArticle(null);
+        find.setMessages(null);
+        return mapper.update(find, wrapper);
+    }
+
+    @Override
+    public void viewCountPlus(Find find) {
+        find.setViewCount(find.getViewCount() + 1);
+        updateFind(find);
+    }
 }

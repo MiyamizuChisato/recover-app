@@ -33,6 +33,8 @@ public class FindController {
     @GetMapping("/get/{id}") // 根据id获取
     public Response getFindById(@PathVariable Integer id) {
         Find find = service.getFindById(id);
+        Find editFind = service.getFindById(id);
+        service.viewCountPlus(editFind);
         if (find != null) {
             return Response.SUCCEED().carry("find", find);
         }
