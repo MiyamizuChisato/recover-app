@@ -14,5 +14,4 @@ public interface FindMapper extends BaseMapper<Find> {
     public List<Find> selectFindsForIndex();
 
     public Find selectFindById(Integer id);
-
 }

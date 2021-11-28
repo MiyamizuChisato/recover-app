@@ -5,11 +5,13 @@ import com.zxc.find.recover.entity.Find;
 import com.zxc.find.recover.service.impl.FindServiceImpl;
 import com.zxc.find.recover.utils.JwtUtils;
 import com.zxc.find.recover.utils.Response;
+import com.zxc.find.recover.utils.TypeItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,8 +26,29 @@ public class FindController {
     @GetMapping("/get")  //首页
     public Response getFindIndex() {
         List<Find> finds = service.getFindIndex();
+        List<Find> eleFinds = new ArrayList<>();
+        List<Find> cloFinds = new ArrayList<>();
+        for (Find find : finds) {
+            if (find.getArticle().getType().getId() == 1) {
+                find.setStartUser(null);
+                eleFinds.add(find);
+            }
+            if (find.getArticle().getType().getId() == 2) {
+                find.setStartUser(null);
+                cloFinds.add(find);
+            }
+        }
+        TypeItem eleItem = new TypeItem();
+        TypeItem cloItem = new TypeItem();
+        eleItem.setName("电子产品");
+        eleItem.setItemList(eleFinds);
+        cloItem.setName("服装类");
+        cloItem.setItemList(cloFinds);
+        List<TypeItem> typeList = new ArrayList<>();
+        typeList.add(eleItem);
+        typeList.add(cloItem);
         if (!finds.isEmpty()) {
-            return Response.SUCCEED().carry("finds", finds);
+            return Response.SUCCEED().carry("typeList", typeList);
         }
         return Response.DEFEAT();
     }
