@@ -22,4 +22,14 @@
         from recover_message
         where fk_find_id = #{id}
     </select>
+    <select id="selectMessageByLostId" resultMap="messageMap">
+        select message_id        id,
+               message_is_delete isDelete,
+               message_date      date,
+               message_content   content,
+               fk_user_id        userId,
+               fk_lost_id        lostId
+        from recover_message
+        where fk_lost_id = #{id}
+    </select>
 </mapper>

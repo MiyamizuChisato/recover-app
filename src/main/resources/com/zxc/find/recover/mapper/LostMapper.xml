@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxc.find.recover.mapper.LostMapper">
+    <resultMap id="lostMapIndex" type="com.zxc.find.recover.entity.Lost">
+        <result column="id" property="id" />
+        <result column="viewCount" property="viewCount" />
+        <result column="startTime" property="startTime" />
+        <association column="startUserId" property="startUser"
+                     select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
+        </association>
+        <association column="articleId" property="article"
+                     select="com.zxc.find.recover.mapper.ArticleMapper.selectArticleById">
+        </association>
+    </resultMap>
+    <resultMap id="lostMap" type="com.zxc.find.recover.entity.Lost">
+        <result column="id" property="id" />
+        <result column="claim" property="claim" />
+        <result column="viewCount" property="viewCount" />
+        <result column="startTime" property="startTime" />
+        <result column="endTime" property="endTime" />
+        <result column="detail" property="detail" />
+        <association column="startUserId" property="startUser" 
+                     select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
+        </association>
+        <association column="endUserId" property="endUser" 
+                     select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
+        </association>
+        <association column="articleId" property="article" 
+                     select="com.zxc.find.recover.mapper.ArticleMapper.selectArticleById">
+        </association>
+        <collection property="messages" column="id" ofType="com.zxc.find.recover.entity.Message"
+                    select="com.zxc.find.recover.mapper.MessageMapper.selectMessageByLostId">
+        </collection>
+    </resultMap>
+    <select id="selectLostForIndex" resultMap="lostMapIndex">
+        select lost_id          id,
+               lost_view_count  viewCount,
+               lost_start_time  startTime,
+               fk_start_user_id startUserId,
+               fk_article_id    articleId
+        from recover_lost
+        where lost_claim = 0
+    </select>
+    <select id="selectLostById" resultMap="lostMap">
+        select lost_id          id,
+               lost_claim       claim,
+               lost_view_count  viewCount,
+               lost_start_time  startTime,
+               lost_end_time    endTime,
+               lost_detail      detail,
+               fk_start_user_id startUserId,
+               fk_end_user_id   endUserId,
+               fk_article_id    articleId
+        from recover_lost
+        where lost_id = #{id}
+    </select>
+</mapper>

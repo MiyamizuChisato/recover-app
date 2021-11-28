@@ -23,13 +23,13 @@ public class UserController {
 
     @PostMapping("/login")
     public Response login(@RequestBody User user) {
-        if (StringUtils.hasLength(user.getPassword()) && StringUtils.hasLength(user.getPassword())) {
+        if (StringUtils.hasLength(user.getEmail()) && StringUtils.hasLength(user.getPassword())) {
             User login = service.login(user);
             if (login != null) {
                 Map<String, String> map = new HashMap<>();
                 map.put("userId", login.getId().toString());
                 map.put("userEmail", login.getEmail());
-                map.put("username", login.getName());
+                map.put("userName", login.getName());
                 map.put("userQQ", login.getQq());
                 map.put("userWechat", login.getWechat());
                 map.put("userPhone", login.getPhone());

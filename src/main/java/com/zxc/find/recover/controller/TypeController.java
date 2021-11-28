@@ -20,7 +20,6 @@ public class TypeController {
     private TypeService service;
 
     @GetMapping("/get")
-
     public Response getAllType() {
         List<Type> types = service.getAllType();
         if (!types.isEmpty()) {

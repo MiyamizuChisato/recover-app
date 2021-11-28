@@ -36,7 +36,7 @@
             <result column="isDelete" property="isDelete"/>
             <result column="date" property="date"/>
             <result column="content" property="content"/>
-            <association column="userId" property="userId"
+            <association column="userId" property="user"
                          select="com.zxc.find.recover.mapper.UserMapper.selectUserById">
             </association>
         </collection>
