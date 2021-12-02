@@ -32,4 +32,8 @@ public class Message implements Serializable {
     private Integer userId;
     @TableField(exist = false)
     private User user;
+    @TableField("fk_find_id")
+    private Integer findId;
+    @TableField("fk_lost_id")
+    private Integer lostId;
 }

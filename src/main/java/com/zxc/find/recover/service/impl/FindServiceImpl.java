@@ -1,15 +1,17 @@
 package com.zxc.find.recover.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zxc.find.recover.entity.Article;
 import com.zxc.find.recover.entity.Find;
+import com.zxc.find.recover.entity.Message;
 import com.zxc.find.recover.mapper.ArticleMapper;
 import com.zxc.find.recover.mapper.FindMapper;
+import com.zxc.find.recover.mapper.MessageMapper;
 import com.zxc.find.recover.service.FindService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -27,21 +29,23 @@ import java.util.UUID;
 @Transactional
 public class FindServiceImpl implements FindService {
     @Autowired
-    private FindMapper mapper;
-
+    private FindMapper findMapper;
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Override
     public List<Find> getFindIndex() {
-        return mapper.selectFindsForIndex();
+        return findMapper.selectFindsForIndex();
     }
 
     @Override
     public Find getFindById(Integer id) {
-        Find find = mapper.selectFindById(id);
-        find.setViewCount(find.getViewCount() + 1);
-        this.updateFind(find);
+        Find find = findMapper.selectFindById(id);
+        if (find != null){
+            viewCountPlus(find);
+        }
         return find;
     }
 
@@ -73,7 +77,7 @@ public class FindServiceImpl implements FindService {
         find.setStartTime(t);
         find.setArticleId(find.getArticle().getId());
         find.setArticle(null);
-        int findResult = mapper.insert(find);
+        int findResult = findMapper.insert(find);
         if (findResult > 0 && articleResult > 0) {
             return 1;
         }
@@ -84,7 +88,24 @@ public class FindServiceImpl implements FindService {
     public int updateFind(Find find) {
         QueryWrapper<Find> wrapper = new QueryWrapper<>();
         wrapper.eq("find_id", find.getId());
-        return mapper.update(find, wrapper);
+        return findMapper.update(find, wrapper);
+    }
+
+    @Override
+    public int deleteFind(Find find) {
+        QueryWrapper<Find> wrapperFind = new QueryWrapper<>();
+        QueryWrapper<Message> wrapperMessage = new QueryWrapper<>();
+        QueryWrapper<Article> wrapperArticle = new QueryWrapper<>();
+        wrapperFind.eq("find_id", find.getId());
+        wrapperArticle.eq("article_id", find.getArticle().getId());
+        wrapperMessage.eq("fk_find_id", find.getId());
+        int deleteFind = findMapper.delete(wrapperFind);
+        int deleteArticle = articleMapper.delete(wrapperArticle);
+        int deleteMessage = messageMapper.delete(wrapperMessage);
+        if (deleteFind > 0 && deleteArticle > 0 && deleteMessage > 0){
+            return 1;
+        }
+        return -1;
     }
 
     @Override

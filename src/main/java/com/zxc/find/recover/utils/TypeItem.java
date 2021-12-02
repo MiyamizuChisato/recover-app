@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TypeItem {
+public class TypeItem<T> {
     private String name;
-    private List<Find> itemList;
+    private List<T> itemList;
 }

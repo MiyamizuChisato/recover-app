@@ -17,5 +17,7 @@ public interface FindService {
 
     public int updateFind(Find find);
 
+    public int deleteFind(Find find);
+
     public void viewCountPlus(Find find);
 }
