@@ -7,28 +7,22 @@ import com.zxc.find.recover.entity.Message;
 import com.zxc.find.recover.mapper.ArticleMapper;
 import com.zxc.find.recover.mapper.LostMapper;
 import com.zxc.find.recover.mapper.MessageMapper;
-import com.zxc.find.recover.service.LostService;
+import com.zxc.find.recover.service.CRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Author YeYuShengFan
  * @Date 2021/11/26 15:40
  */
-@Service
+@Component
 @Transactional
-public class LostServiceImpl implements LostService {
+public class LostServiceImpl implements CRUDService<Lost> {
     @Autowired
     private LostMapper lostMapper;
     @Autowired
@@ -37,12 +31,12 @@ public class LostServiceImpl implements LostService {
     private MessageMapper messageMapper;
 
     @Override
-    public List<Lost> getLostIndex() {
+    public List<Lost> getIndex() {
         return lostMapper.selectLostForIndex();
     }
 
     @Override
-    public Lost getLostById(Integer id) {
+    public Lost getInfoById(Integer id) {
         Lost lost = lostMapper.selectLostById(id);
         if (lost != null){
             viewCountPlus(lost);
@@ -51,49 +45,29 @@ public class LostServiceImpl implements LostService {
     }
 
     @Override
-    public int addLost(Lost lost, MultipartFile picture) {
-        if (picture != null) {
-            try {
-                String path = ResourceUtils.getURL("classpath:").getPath() + "static/images/article";
-                String uuid = UUID.randomUUID().toString();
-                String suffix = picture.getOriginalFilename().substring(picture.getOriginalFilename().lastIndexOf("."));
-                File file = new File(path);
-                if (!file.exists()) {
-                    file.mkdir();
-                }
-                String picPath = path + "/" + uuid + suffix;
-                picture.transferTo(new File(picPath));
-                lost.getArticle().setPicture("/images/article/" + uuid + suffix);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            lost.getArticle().setPicture("/images/article/" + "article.png");
-        }
+    public int addNewInfo(Lost lost) {
         int articleResult = articleMapper.insert(lost.getArticle());
         java.util.Date date = new Date();
         Timestamp t = new Timestamp(date.getTime());
         lost.setStartTime(t);
-        lost.setArticleId(lost.getArticle().getId());//前端不传物品id，为null
+        lost.setArticleId(lost.getArticle().getId());
         lost.setArticle(null);
         int lostResult = lostMapper.insert(lost);
         if (lostResult > 0 && articleResult > 0) {
-            return 1;
+            return lost.getArticle().getId();
         }
         return -1;
     }
 
     @Override
-    public int updateLost(Lost lost) {
+    public int updateInfo(Lost lost) {
         QueryWrapper<Lost> wrapper = new QueryWrapper<>();
         wrapper.eq("lost_id", lost.getId());
         return lostMapper.update(lost, wrapper);
     }
 
     @Override
-    public int deleteLost(Lost lost) {
+    public int deleteInfo(Lost lost) {
         QueryWrapper<Lost> wrapperLost = new QueryWrapper<>();
         QueryWrapper<Message> wrapperMessage = new QueryWrapper<>();
         QueryWrapper<Article> wrapperArticle = new QueryWrapper<>();
@@ -112,6 +86,6 @@ public class LostServiceImpl implements LostService {
     @Override
     public void viewCountPlus(Lost lost) {
         lost.setViewCount(lost.getViewCount() + 1);
-        updateLost(lost);
+        updateInfo(lost);
     }
 }

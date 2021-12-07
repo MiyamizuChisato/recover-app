@@ -1,6 +1,5 @@
 package com.zxc.find.recover.utils;
 
-import com.zxc.find.recover.entity.Find;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
